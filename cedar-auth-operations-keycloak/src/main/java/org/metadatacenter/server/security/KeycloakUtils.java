@@ -16,13 +16,7 @@ import org.keycloak.util.JsonSerialization;
 import org.metadatacenter.constant.HttpConstants;
 import org.metadatacenter.constant.KeycloakConstants;
 import org.metadatacenter.server.security.exception.*;
-import org.metadatacenter.server.security.model.AuthorisedUser;
-import org.metadatacenter.server.security.model.IAccountInfo;
-import org.metadatacenter.server.security.model.IUserInfo;
-import org.metadatacenter.server.security.model.SecurityRole;
-import org.metadatacenter.server.security.model.keycloak.KeycloakAccountInfo;
-import org.metadatacenter.server.security.model.keycloak.KeycloakUserInfo;
-import org.metadatacenter.server.security.model.play.IAuthRequest;
+import org.metadatacenter.server.security.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +72,7 @@ public class KeycloakUtils {
     } catch (IOException e) {
       e.printStackTrace();
       log.error("Error while converting content", e);
+      e.printStackTrace();
     }
     return content;
   }
@@ -90,13 +85,13 @@ public class KeycloakUtils {
     return Base64Url.encode(sb.toString().getBytes());
   }
 
-  private static IAccountInfo getAccountInfo(IAuthRequest authRequest) {
+  public static IAccountInfo getAccountInfoUsingToken(String token) {
     final KeycloakDeployment deployment = KeycloakDeploymentProvider.getInstance().getKeycloakDeployment();
 
     IAccountInfo accountInfo = null;
 
     String url = deployment.getRealmInfoUrl() + KeycloakConstants.ACCOUNT_URL_SUFFIX;
-    String authString = HttpConstants.HTTP_AUTH_HEADER_BEARER_PREFIX + authRequest.getToken();
+    String authString = HttpConstants.HTTP_AUTH_HEADER_BEARER_PREFIX + token;
 
     try {
       HttpResponse response = Request.Get(url)
@@ -120,18 +115,19 @@ public class KeycloakUtils {
 
     } catch (IOException ex) {
       log.error("Error while reading user details from Keycloak", ex);
+      ex.printStackTrace();
     }
 
     return accountInfo;
   }
 
-  private static IUserInfo getUserInfo(IAuthRequest authRequest) {
+  private static IUserInfo getUserInfoUsingToken(String token) {
     final KeycloakDeployment deployment = KeycloakDeploymentProvider.getInstance().getKeycloakDeployment();
 
     IUserInfo userInfo = null;
 
     String url = deployment.getRealmInfoUrl() + KeycloakConstants.USERINFO_URL_SUFFIX;
-    String authString = HttpConstants.HTTP_AUTH_HEADER_BEARER_PREFIX + authRequest.getToken();
+    String authString = HttpConstants.HTTP_AUTH_HEADER_BEARER_PREFIX + token;
 
     try {
       HttpResponse response = Request.Get(url)
@@ -155,18 +151,19 @@ public class KeycloakUtils {
 
     } catch (IOException ex) {
       log.error("Error while reading user details from Keycloak", ex);
+      ex.printStackTrace();
     }
 
     return userInfo;
   }
 
-  public static void enforceRealmRoleOnOfflineToken(IAuthRequest authRequest, String roleName) throws
+  public static void enforceRealmRoleOnOfflineToken(String token, String roleName) throws
       CedarAccessException {
     try {
-      if (authRequest.getToken() == null) {
+      if (token == null) {
         throw new AccessTokenMissingException();
       }
-      AccessToken accessToken = KeycloakUtils.parseToken(authRequest.getToken(), AccessToken.class);
+      AccessToken accessToken = KeycloakUtils.parseToken(token, AccessToken.class);
       if (accessToken == null) {
         throw new InvalidOfflineAccessTokenException();
       } else if (accessToken.isExpired()) {
@@ -179,12 +176,13 @@ public class KeycloakUtils {
         }
       }
     } catch (IOException e) {
+      e.printStackTrace();
       throw new InvalidOfflineAccessTokenException();
     }
   }
 
-  public static void checkIfTokenIsStillActiveByUserInfo(IAuthRequest authRequest) throws CedarAccessException {
-    IUserInfo userInfo = getUserInfo(authRequest);
+  public static void checkIfTokenIsStillActiveByUserInfo(String token) throws CedarAccessException {
+    IUserInfo userInfo = getUserInfoUsingToken(token);
     if (userInfo == null) {
       throw new FailedToLoadUserInfoException();
     }

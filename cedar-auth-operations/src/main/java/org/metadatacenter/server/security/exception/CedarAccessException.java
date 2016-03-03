@@ -12,6 +12,12 @@ public class CedarAccessException extends Exception {
     this.suggestedAction = suggestedAction;
   }
 
+  public CedarAccessException(String message, String errorCode, String suggestedAction, Throwable t) {
+    super(message, t);
+    this.errorCode = errorCode;
+    this.suggestedAction = suggestedAction;
+  }
+
   public String getSuggestedAction() {
     return suggestedAction;
   }

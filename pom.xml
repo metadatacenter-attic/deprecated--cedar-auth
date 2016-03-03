@@ -14,6 +14,7 @@
   <modules>
     <module>cedar-auth-operations</module>
     <module>cedar-auth-operations-keycloak</module>
+    <module>cedar-auth-operations-noauth</module>
     <module>cedar-auth-operations-play</module>
   </modules>
 
@@ -62,12 +63,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
 
