@@ -15,7 +15,7 @@
   <packaging>pom</packaging>
 
   <name>CEDAR Authorization Components</name>
-  <description>CEDAR auth components</description>
+  <description>CEDAR authorization components</description>
 
   <modules>
     <module>cedar-auth-operations</module>
@@ -23,35 +23,5 @@
     <module>cedar-auth-operations-noauth</module>
     <module>cedar-auth-operations-play</module>
   </modules>
-
-  <properties>
-  </properties>
-
-  <dependencies>
-    
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
-  </dependencies>
 
 </project>

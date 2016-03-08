@@ -1,5 +1,7 @@
 package org.metadatacenter.server.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.metadatacenter.server.security.exception.CedarAccessException;
 import org.metadatacenter.server.security.model.CedarCapability;
 import org.metadatacenter.server.security.model.IAccountInfo;
@@ -8,7 +10,7 @@ import org.metadatacenter.server.security.model.IAuthRequest;
 public final class Authorization {
 
   private static IAuthorizationResolver resolver;
-  private static IUserService userService;
+  private static IUserService<String, String, JsonNode> userService;
 
   private Authorization() {
   }
@@ -17,7 +19,7 @@ public final class Authorization {
     resolver = r;
   }
 
-  public static void setUserService(IUserService us) {
+  public static void setUserService(IUserService<String, String, JsonNode> us) {
     userService = us;
   }
 

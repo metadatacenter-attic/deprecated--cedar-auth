@@ -1,8 +1,7 @@
 package org.metadatacenter.server.security;
 
-import checkers.nullness.quals.NonNull;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
-import org.metadatacenter.server.security.IUserService;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
