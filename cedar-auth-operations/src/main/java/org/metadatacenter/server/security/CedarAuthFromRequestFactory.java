@@ -1,13 +1,12 @@
 package org.metadatacenter.server.security;
 
 import org.metadatacenter.constant.HttpConstants;
-import org.metadatacenter.server.security.exception.AuthorizationNotFoundException;
 import org.metadatacenter.server.security.model.IAuthRequest;
 import play.mvc.Http;
 
-public abstract class CedarAuthFromRequestFactory{
+public abstract class CedarAuthFromRequestFactory {
 
-  public static IAuthRequest fromRequest(Http.Request request) throws AuthorizationNotFoundException {
+  public static IAuthRequest fromRequest(Http.Request request) {
     if (request != null) {
       String auth = request.getHeader(Http.HeaderNames.AUTHORIZATION);
       if (auth != null) {
@@ -18,7 +17,7 @@ public abstract class CedarAuthFromRequestFactory{
         }
       }
     }
-    throw new AuthorizationNotFoundException();
+    return new CedarNoAuthRequest();
   }
 
 }

@@ -1,15 +1,13 @@
 package org.metadatacenter.server.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.metadatacenter.server.security.exception.ApiKeyNotFoundException;
+import org.metadatacenter.server.security.exception.AuthorizationNotFoundException;
 import org.metadatacenter.server.security.exception.CedarAccessException;
 import org.metadatacenter.server.security.exception.FailedToLoadUserByApiKeyException;
 import org.metadatacenter.server.security.model.CedarCapability;
 import org.metadatacenter.server.security.model.IAccountInfo;
 import org.metadatacenter.server.security.model.IAuthRequest;
-import com.fasterxml.jackson.databind.JsonNode;
-
-
-import java.io.IOException;
 
 public class AuthorizationKeycloakAndApiKeyResolver implements IAuthorizationResolver {
 
@@ -33,14 +31,19 @@ public class AuthorizationKeycloakAndApiKeyResolver implements IAuthorizationRes
         throw new ApiKeyNotFoundException(authRequest.getAuthString());
       }
       //TODO we could read user data, but we do not do that for the moment.
+    } else {
+      throw new AuthorizationNotFoundException();
     }
   }
 
   public IAccountInfo getAccountInfo(IAuthRequest authRequest) throws CedarAccessException {
     if (authRequest instanceof CedarBearerAuthRequest) {
       return KeycloakUtils.getAccountInfoUsingToken(authRequest.getAuthString());
+    } else if (authRequest instanceof CedarApiKeyAuthRequest) {
+      return null;
+    } else {
+      throw new AuthorizationNotFoundException();
     }
-    return null;
   }
 
 }
