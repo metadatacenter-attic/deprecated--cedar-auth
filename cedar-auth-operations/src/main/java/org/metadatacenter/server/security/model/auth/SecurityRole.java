@@ -1,4 +1,4 @@
-package org.metadatacenter.server.security.model;
+package org.metadatacenter.server.security.model.auth;
 
 public class SecurityRole {
 

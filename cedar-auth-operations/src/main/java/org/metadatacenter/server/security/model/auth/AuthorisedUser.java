@@ -1,5 +1,8 @@
-package org.metadatacenter.server.security.model;
+package org.metadatacenter.server.security.model.auth;
 
+
+import org.metadatacenter.server.security.model.auth.SecurityRole;
+import org.metadatacenter.server.security.model.auth.UserPermission;
 
 import java.util.List;
 

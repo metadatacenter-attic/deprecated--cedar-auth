@@ -1,27 +1,25 @@
 package org.metadatacenter.server.security;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.metadatacenter.server.security.exception.ApiKeyNotFoundException;
 import org.metadatacenter.server.security.exception.AuthorizationNotFoundException;
 import org.metadatacenter.server.security.exception.CedarAccessException;
 import org.metadatacenter.server.security.exception.FailedToLoadUserByApiKeyException;
-import org.metadatacenter.server.security.model.CedarCapability;
-import org.metadatacenter.server.security.model.IAccountInfo;
 import org.metadatacenter.server.security.model.IAuthRequest;
+import org.metadatacenter.server.security.model.auth.CedarPermission;
+import org.metadatacenter.server.security.model.auth.IAccountInfo;
+import org.metadatacenter.server.security.model.user.CedarUser;
 
 public class AuthorizationKeycloakAndApiKeyResolver implements IAuthorizationResolver {
 
   @Override
-  public void mustHaveCapability(IAuthRequest authRequest, CedarCapability capability, IUserService<String, String,
-      JsonNode> userService) throws
+  public void mustHavePermission(IAuthRequest authRequest, CedarPermission permission, IUserService userService) throws
       CedarAccessException {
     if (authRequest instanceof CedarBearerAuthRequest) {
-      String cn = capability.getCapabilityName();
-      KeycloakUtils.enforceRealmRoleOnOfflineToken(authRequest.getAuthString(), cn);
       KeycloakUtils.checkIfTokenIsStillActiveByUserInfo(authRequest.getAuthString());
+      KeycloakUtils.enforceCedarUserRole(authRequest.getAuthString(), permission.getPermissionName(), userService);
     } else if (authRequest instanceof CedarApiKeyAuthRequest) {
-      String cn = capability.getCapabilityName();
-      JsonNode user = null;
+      String cn = permission.getPermissionName();
+      CedarUser user = null;
       try {
         user = userService.findUserByApiKey(authRequest.getAuthString());
       } catch (Exception e) {

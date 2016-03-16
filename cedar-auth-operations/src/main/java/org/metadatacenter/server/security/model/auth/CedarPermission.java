@@ -1,7 +1,9 @@
-package org.metadatacenter.server.security.model;
+package org.metadatacenter.server.security.model.auth;
 
 
-public enum CedarCapability {
+import org.metadatacenter.server.security.model.CedarObjectConstants;
+
+public enum CedarPermission {
 
   TEMPLATE_CREATE(CedarObjectConstants.RESOURCE_TEMPLATE, CedarObjectConstants.ACCESS_CREATE),
   TEMPLATE_READ(CedarObjectConstants.RESOURCE_TEMPLATE, CedarObjectConstants.ACCESS_READ),
@@ -21,21 +23,24 @@ public enum CedarCapability {
   TEMPLATE_INSTANCE_CREATE(CedarObjectConstants.RESOURCE_TEMPLATE_INSTANCE, CedarObjectConstants.ACCESS_CREATE),
   TEMPLATE_INSTANCE_READ(CedarObjectConstants.RESOURCE_TEMPLATE_INSTANCE, CedarObjectConstants.ACCESS_READ),
   TEMPLATE_INSTANCE_UPDATE(CedarObjectConstants.RESOURCE_TEMPLATE_INSTANCE, CedarObjectConstants.ACCESS_UPDATE),
-  TEMPLATE_INSTANCE_DELETE(CedarObjectConstants.RESOURCE_TEMPLATE_INSTANCE, CedarObjectConstants.ACCESS_DELETE);
+  TEMPLATE_INSTANCE_DELETE(CedarObjectConstants.RESOURCE_TEMPLATE_INSTANCE, CedarObjectConstants.ACCESS_DELETE),
+
+  JUST_AUTHORIZED("just", "authorized"),
+  USER_PROFILE_OWN_READ(CedarObjectConstants.USER_PROFILE_OWN, CedarObjectConstants.ACCESS_READ);
 
   private final String resourceType;
   private final String accessType;
-  private final String capabilityName;
+  private final String permissionName;
 
-  CedarCapability(String resourceType, String accessType) {
+  CedarPermission(String resourceType, String accessType) {
     this.resourceType = resourceType;
     this.accessType = accessType;
     StringBuilder sb = new StringBuilder();
-    sb.append("capability_");
+    sb.append("permission_");
     sb.append(resourceType);
     sb.append("_");
     sb.append(accessType);
-    capabilityName = sb.toString();
+    permissionName = sb.toString();
   }
 
   public String getAccessType() {
@@ -46,7 +51,7 @@ public enum CedarCapability {
     return resourceType;
   }
 
-  public String getCapabilityName() {
-    return capabilityName;
+  public String getPermissionName() {
+    return permissionName;
   }
 }

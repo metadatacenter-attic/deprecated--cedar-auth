@@ -1,6 +1,7 @@
 package org.metadatacenter.server.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -17,6 +18,11 @@ import org.metadatacenter.constant.HttpConstants;
 import org.metadatacenter.constant.KeycloakConstants;
 import org.metadatacenter.server.security.exception.*;
 import org.metadatacenter.server.security.model.*;
+import org.metadatacenter.server.security.model.auth.AuthorisedUser;
+import org.metadatacenter.server.security.model.auth.CedarPermission;
+import org.metadatacenter.server.security.model.auth.IAccountInfo;
+import org.metadatacenter.server.security.model.auth.SecurityRole;
+import org.metadatacenter.server.security.model.user.CedarUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,7 +163,7 @@ public class KeycloakUtils {
     return userInfo;
   }
 
-  public static void enforceRealmRoleOnOfflineToken(String token, String roleName) throws
+  public static void enforceRealmRoleOnOfflineToken(String token, String permissionName) throws
       CedarAccessException {
     try {
       if (token == null) {
@@ -171,8 +177,8 @@ public class KeycloakUtils {
       } else {
         if (accessToken.getRealmAccess() == null
             || accessToken.getRealmAccess().getRoles() == null
-            || !accessToken.getRealmAccess().getRoles().contains(roleName)) {
-          throw new MissingRealmRoleException(roleName);
+            || !accessToken.getRealmAccess().getRoles().contains(permissionName)) {
+          throw new MissingPermissionException(permissionName);
         }
       }
     } catch (IOException e) {
@@ -204,4 +210,39 @@ public class KeycloakUtils {
     return au;
   }
 
+  public static void enforceCedarUserRole(String token, String permissionName, IUserService userService) throws
+      CedarAccessException {
+    try {
+      if (token == null) {
+        throw new AccessTokenMissingException();
+      }
+      AccessToken accessToken = KeycloakUtils.parseToken(token, AccessToken.class);
+      if (accessToken == null) {
+        throw new InvalidOfflineAccessTokenException();
+      } else if (accessToken.isExpired()) {
+        throw new AccessTokenExpiredException(accessToken.getExpiration());
+      } else {
+        if (!CedarPermission.JUST_AUTHORIZED.getPermissionName().equals(permissionName)) {
+          String userId = accessToken.getSubject();
+          CedarUser user = null;
+          try {
+            user = userService.findUser(userId);
+          } catch (ProcessingException e) {
+            throw new FailedToLoadUserByIdException(e);
+          }
+          if (user == null) {
+            throw new CedarUserNotFoundException(userId);
+          }
+          CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
+          List<String> permissions = user.getPermissions();
+          if (permissions == null || !permissions.contains(permissionName)) {
+            throw new MissingPermissionException(permissionName);
+          }
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new InvalidOfflineAccessTokenException();
+    }
+  }
 }
