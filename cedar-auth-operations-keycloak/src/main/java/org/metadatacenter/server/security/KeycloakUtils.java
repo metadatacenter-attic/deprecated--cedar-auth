@@ -188,6 +188,18 @@ public class KeycloakUtils {
   }
 
   public static void checkIfTokenIsStillActiveByUserInfo(String token) throws CedarAccessException {
+    AccessToken accessToken = null;
+    try {
+      accessToken = KeycloakUtils.parseToken(token, AccessToken.class);
+    } catch (IOException e) {
+      throw new InvalidOfflineAccessTokenException();
+    }
+    if (accessToken == null) {
+      throw new InvalidOfflineAccessTokenException();
+    } else if (accessToken.isExpired()) {
+      throw new AccessTokenExpiredException(accessToken.getExpiration());
+    }
+
     IUserInfo userInfo = getUserInfoUsingToken(token);
     if (userInfo == null) {
       throw new FailedToLoadUserInfoException();
