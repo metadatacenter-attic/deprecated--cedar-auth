@@ -1,38 +1,41 @@
 package org.metadatacenter.server.security.model.auth;
 
-
-import org.metadatacenter.server.security.model.auth.SecurityRole;
-import org.metadatacenter.server.security.model.auth.UserPermission;
-
-import java.util.List;
-
 public class AuthorisedUser {
 
-  private List<? extends SecurityRole> roles;
-  private List<? extends UserPermission> permissions;
-  private String identifier;
+  private String id;
+  private String firstName;
+  private String middleName;
+  private String lastName;
 
-  public void setRoles(List<? extends SecurityRole> roles) {
-    this.roles = roles;
+  public String getId() {
+    return id;
   }
 
-  public void setPermissions(List<? extends UserPermission> permissions) {
-    this.permissions = permissions;
+  public void setId(String id) {
+    this.id = id;
   }
 
-  public void setIdentifier(String identifier) {
-    this.identifier = identifier;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public List<? extends SecurityRole> getRoles() {
-    return roles;
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
   }
 
-  public List<? extends UserPermission> getPermissions() {
-    return permissions;
+  public String getMiddleName() {
+    return middleName;
   }
 
-  public String getIdentifier() {
-    return identifier;
+  public void setMiddleName(String middleName) {
+    this.middleName = middleName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 }

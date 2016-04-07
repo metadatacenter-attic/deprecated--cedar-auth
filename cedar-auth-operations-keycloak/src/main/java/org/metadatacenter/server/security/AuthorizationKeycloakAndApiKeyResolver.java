@@ -1,15 +1,22 @@
 package org.metadatacenter.server.security;
 
-import org.metadatacenter.server.security.exception.ApiKeyNotFoundException;
-import org.metadatacenter.server.security.exception.AuthorizationNotFoundException;
-import org.metadatacenter.server.security.exception.CedarAccessException;
-import org.metadatacenter.server.security.exception.FailedToLoadUserByApiKeyException;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import org.keycloak.representations.AccessToken;
+import org.metadatacenter.server.security.exception.*;
 import org.metadatacenter.server.security.model.IAuthRequest;
+import org.metadatacenter.server.security.model.auth.AuthorisedUser;
 import org.metadatacenter.server.security.model.auth.CedarPermission;
-import org.metadatacenter.server.security.model.auth.IAccountInfo;
 import org.metadatacenter.server.security.model.user.CedarUser;
 
+import java.io.IOException;
+
 public class AuthorizationKeycloakAndApiKeyResolver implements IAuthorizationResolver {
+
+  IUserService userService;
+
+  public AuthorizationKeycloakAndApiKeyResolver(IUserService userService) {
+    this.userService = userService;
+  }
 
   @Override
   public void mustHavePermission(IAuthRequest authRequest, CedarPermission permission, IUserService userService) throws
@@ -34,11 +41,26 @@ public class AuthorizationKeycloakAndApiKeyResolver implements IAuthorizationRes
     }
   }
 
-  public IAccountInfo getAccountInfo(IAuthRequest authRequest) throws CedarAccessException {
+  public CedarUser getAccountInfo(IAuthRequest authRequest) throws CedarAccessException {
     if (authRequest instanceof CedarBearerAuthRequest) {
-      return KeycloakUtils.getAccountInfoUsingToken(authRequest.getAuthString());
+      AccessToken accessToken = null;
+      try {
+        accessToken = KeycloakUtils.parseToken(authRequest.getAuthString(), AccessToken.class);
+      } catch (IOException e) {
+        throw new InvalidOfflineAccessTokenException();
+      }
+      AuthorisedUser userFromToken = KeycloakUtils.getUserFromToken(accessToken);
+      try {
+        return userService.findUser(userFromToken.getId());
+      } catch (IOException | ProcessingException e) {
+        throw new AuthorizationNotFoundException(e);
+      }
     } else if (authRequest instanceof CedarApiKeyAuthRequest) {
-      return null;
+      try {
+      return userService.findUserByApiKey(authRequest.getAuthString());
+      } catch (IOException | ProcessingException e) {
+        throw new AuthorizationNotFoundException(e);
+      }
     } else {
       throw new AuthorizationNotFoundException();
     }

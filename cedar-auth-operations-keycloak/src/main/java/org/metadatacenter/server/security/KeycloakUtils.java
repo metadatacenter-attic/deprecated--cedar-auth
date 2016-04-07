@@ -18,12 +18,9 @@ import org.metadatacenter.constant.HttpConstants;
 import org.metadatacenter.constant.KeycloakConstants;
 import org.metadatacenter.server.security.exception.*;
 import org.metadatacenter.server.security.model.IUserInfo;
-import org.metadatacenter.server.security.model.KeycloakAccountInfo;
 import org.metadatacenter.server.security.model.KeycloakUserInfo;
 import org.metadatacenter.server.security.model.auth.AuthorisedUser;
 import org.metadatacenter.server.security.model.auth.CedarPermission;
-import org.metadatacenter.server.security.model.auth.IAccountInfo;
-import org.metadatacenter.server.security.model.auth.SecurityRole;
 import org.metadatacenter.server.security.model.user.CedarUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +31,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class KeycloakUtils {
 
@@ -91,42 +87,6 @@ public class KeycloakUtils {
     StringBuilder sb = new StringBuilder();
     sb.append(resourceId).append(":").append(clientSecret);
     return Base64Url.encode(sb.toString().getBytes());
-  }
-
-  public static IAccountInfo getAccountInfoUsingToken(String token) {
-    final KeycloakDeployment deployment = KeycloakDeploymentProvider.getInstance().getKeycloakDeployment();
-
-    IAccountInfo accountInfo = null;
-
-    String url = deployment.getRealmInfoUrl() + KeycloakConstants.ACCOUNT_URL_SUFFIX;
-    String authString = HttpConstants.HTTP_AUTH_HEADER_BEARER_PREFIX + token;
-
-    try {
-      HttpResponse response = Request.Get(url)
-          .addHeader(HttpConstants.HTTP_HEADER_CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM)
-          .addHeader(HttpConstants.HTTP_HEADER_AUTHORIZATION, authString)
-          .addHeader(HttpConstants.HTTP_HEADER_ACCEPT, HttpConstants.CONTENT_TYPE_APPLICATION_JSON)
-          .connectTimeout(connectTimeout)
-          .socketTimeout(socketTimeout)
-          .execute()
-          .returnResponse();
-
-      int statusCode = response.getStatusLine().getStatusCode();
-      //System.out.println("Status code:" + statusCode);
-      String responseAsString = EntityUtils.toString(response.getEntity());
-      if (statusCode == HttpConstants.OK) {
-        ObjectMapper mapper = new ObjectMapper();
-        accountInfo = mapper.readValue(responseAsString, KeycloakAccountInfo.class);
-      } else {
-        //System.out.println("Reponse:" + responseAsString);
-      }
-
-    } catch (IOException ex) {
-      log.error("Error while reading user details from Keycloak", ex);
-      ex.printStackTrace();
-    }
-
-    return accountInfo;
   }
 
   private static IUserInfo getUserInfoUsingToken(String token) {
@@ -211,15 +171,10 @@ public class KeycloakUtils {
   public static AuthorisedUser getUserFromToken(AccessToken accessToken) {
     AuthorisedUser au = new AuthorisedUser();
     if (accessToken != null) {
-      au.setIdentifier(accessToken.getPreferredUsername());
-      List<SecurityRole> roles = new ArrayList<>();
-      Set<String> realmRoleNames = accessToken.getRealmAccess().getRoles();
-      for (String roleName : realmRoleNames) {
-        SecurityRole sr = new SecurityRole();
-        sr.setName(roleName);
-        roles.add(sr);
-      }
-      au.setRoles(roles);
+      au.setId(accessToken.getSubject());
+      au.setFirstName(accessToken.getGivenName());
+      au.setMiddleName(accessToken.getMiddleName());
+      au.setLastName(accessToken.getFamilyName());
     }
     return au;
   }
