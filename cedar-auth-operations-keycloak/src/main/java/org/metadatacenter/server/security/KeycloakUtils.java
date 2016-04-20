@@ -14,6 +14,7 @@ import org.keycloak.adapters.KeycloakDeploymentBuilder;
 import org.keycloak.common.util.Base64Url;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.util.JsonSerialization;
+import org.metadatacenter.constant.HttpConnectionConstants;
 import org.metadatacenter.constant.HttpConstants;
 import org.metadatacenter.constant.KeycloakConstants;
 import org.metadatacenter.server.security.exception.*;
@@ -35,8 +36,7 @@ import java.util.List;
 public class KeycloakUtils {
 
   private final static String SECRET_KEY = "secret";
-  private static final int connectTimeout = 1000;
-  private static final int socketTimeout = 10000;
+
   private static Logger log = LoggerFactory.getLogger(KeycloakUtils.class);
 
   public static <T> T parseToken(String encoded, Class<T> clazz) throws IOException {
@@ -102,8 +102,8 @@ public class KeycloakUtils {
           .addHeader(HttpConstants.HTTP_HEADER_CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM)
           .addHeader(HttpConstants.HTTP_HEADER_AUTHORIZATION, authString)
           .addHeader(HttpConstants.HTTP_HEADER_ACCEPT, HttpConstants.CONTENT_TYPE_APPLICATION_JSON)
-          .connectTimeout(connectTimeout)
-          .socketTimeout(socketTimeout)
+          .connectTimeout(HttpConnectionConstants.CONNECTION_TIMEOUT)
+          .socketTimeout(HttpConnectionConstants.SOCKET_TIMEOUT)
           .execute()
           .returnResponse();
 
