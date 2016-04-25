@@ -26,6 +26,10 @@ public abstract class CedarUserRolePermissionUtil {
     creatorPermissions.add(CedarPermission.TEMPLATE_READ.getPermissionName());
     creatorPermissions.add(CedarPermission.TEMPLATE_UPDATE.getPermissionName());
     creatorPermissions.add(CedarPermission.TEMPLATE_DELETE.getPermissionName());
+    creatorPermissions.add(CedarPermission.FOLDER_CREATE.getPermissionName());
+    creatorPermissions.add(CedarPermission.FOLDER_READ.getPermissionName());
+    creatorPermissions.add(CedarPermission.FOLDER_UPDATE.getPermissionName());
+    creatorPermissions.add(CedarPermission.FOLDER_DELETE.getPermissionName());
     creatorPermissions.add(CedarPermission.USER_PROFILE_OWN_READ.getPermissionName());
 
     instantiatorPermissions = new ArrayList<>();
