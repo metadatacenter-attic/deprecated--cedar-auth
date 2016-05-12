@@ -2,7 +2,7 @@ package org.metadatacenter.server.security.model.user;
 
 public class CedarUserUIPopulateATemplate implements CedarUserUIPreferences {
 
-  private PopulateATemplateStatus status;
+  private boolean opened;
   private String sortBy;
   private SortOrder sortDirection;
   private ViewMode viewMode;
@@ -10,12 +10,12 @@ public class CedarUserUIPopulateATemplate implements CedarUserUIPreferences {
   public CedarUserUIPopulateATemplate() {
   }
 
-  public PopulateATemplateStatus getStatus() {
-    return status;
+  public boolean isOpened() {
+    return opened;
   }
 
-  public void setStatus(PopulateATemplateStatus status) {
-    this.status = status;
+  public void setOpened(boolean opened) {
+    this.opened = opened;
   }
 
   public String getSortBy() {
