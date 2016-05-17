@@ -18,10 +18,10 @@ import org.metadatacenter.constant.HttpConnectionConstants;
 import org.metadatacenter.constant.HttpConstants;
 import org.metadatacenter.constant.KeycloakConstants;
 import org.metadatacenter.server.security.exception.*;
+import org.metadatacenter.server.security.model.IAuthRequest;
 import org.metadatacenter.server.security.model.IUserInfo;
 import org.metadatacenter.server.security.model.KeycloakUserInfo;
 import org.metadatacenter.server.security.model.auth.AuthorisedUser;
-import org.metadatacenter.server.security.model.auth.CedarPermission;
 import org.metadatacenter.server.security.model.user.CedarUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,8 +149,11 @@ public class KeycloakUtils {
     }
   }
 
-  public static void checkIfTokenIsStillActiveByUserInfo(String token) throws CedarAccessException {
+  private static AccessToken checkIfTokenIsStillActiveByUserInfo(String token) throws CedarAccessException {
     AccessToken accessToken = null;
+    if (token == null) {
+      throw new AccessTokenMissingException();
+    }
     try {
       accessToken = KeycloakUtils.parseToken(token, AccessToken.class);
     } catch (IOException e) {
@@ -160,11 +163,8 @@ public class KeycloakUtils {
       throw new InvalidOfflineAccessTokenException();
     } else if (accessToken.isExpired()) {
       throw new AccessTokenExpiredException(accessToken.getExpiration());
-    }
-
-    IUserInfo userInfo = getUserInfoUsingToken(token);
-    if (userInfo == null) {
-      throw new FailedToLoadUserInfoException();
+    } else {
+      return accessToken;
     }
   }
 
@@ -179,39 +179,22 @@ public class KeycloakUtils {
     return au;
   }
 
-  public static void enforceCedarUserRole(String token, String permissionName, IUserService userService) throws
+  public static CedarUser getUserFromAuthRequest(IAuthRequest authRequest, IUserService userService) throws
       CedarAccessException {
+    String token = authRequest.getAuthString();
+    AccessToken accessToken = checkIfTokenIsStillActiveByUserInfo(token);
+    String userId = accessToken.getSubject();
+    CedarUser user = null;
     try {
-      if (token == null) {
-        throw new AccessTokenMissingException();
-      }
-      AccessToken accessToken = KeycloakUtils.parseToken(token, AccessToken.class);
-      if (accessToken == null) {
-        throw new InvalidOfflineAccessTokenException();
-      } else if (accessToken.isExpired()) {
-        throw new AccessTokenExpiredException(accessToken.getExpiration());
-      } else {
-        if (!CedarPermission.JUST_AUTHORIZED.getPermissionName().equals(permissionName)) {
-          String userId = accessToken.getSubject();
-          CedarUser user = null;
-          try {
-            user = userService.findUser(userId);
-          } catch (ProcessingException e) {
-            throw new FailedToLoadUserByIdException(e);
-          }
-          if (user == null) {
-            throw new CedarUserNotFoundException(userId);
-          }
-          CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
-          List<String> permissions = user.getPermissions();
-          if (permissions == null || !permissions.contains(permissionName)) {
-            throw new MissingPermissionException(permissionName);
-          }
-        }
-      }
+      user = userService.findUser(userId);
     } catch (IOException e) {
       e.printStackTrace();
-      throw new InvalidOfflineAccessTokenException();
+    } catch (ProcessingException e) {
+      e.printStackTrace();
     }
+    if (user != null) {
+      CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
+    }
+    return user;
   }
 }

@@ -6,7 +6,9 @@ import java.lang.String;
 
 public enum CedarUserRole {
   TEMPLATE_CREATOR("templateCreator"),
-  TEMPLATE_INSTANTIATOR("templateInstantiator");
+  TEMPLATE_INSTANTIATOR("templateInstantiator"),
+  BUILT_IN_SYSTEM_ADMINISTRATOR("builtInSystemAdministrator"),
+  ADMINISTRATOR("administrator");
 
   private final String value;
 

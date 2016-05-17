@@ -21,13 +21,13 @@ public final class Authorization {
     userService = us;
   }
 
-  public static void mustHavePermission(IAuthRequest authRequest, CedarPermission permission) throws
+  public static CedarUser getUserAndEnsurePermission(IAuthRequest authRequest, CedarPermission permission) throws
       CedarAccessException {
-    resolver.mustHavePermission(authRequest, permission, userService);
+    return resolver.getUserAndEnsurePermission(authRequest, permission, userService);
   }
 
-  public static CedarUser getAccountInfo(IAuthRequest authRequest) throws CedarAccessException {
-    return resolver.getAccountInfo(authRequest);
+  public static CedarUser getUser(IAuthRequest authRequest) throws CedarAccessException {
+    return resolver.getUser(authRequest, userService);
   }
 
 }

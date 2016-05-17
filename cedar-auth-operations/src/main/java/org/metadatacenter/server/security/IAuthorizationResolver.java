@@ -8,9 +8,9 @@ import org.metadatacenter.server.security.model.user.CedarUser;
 
 public interface IAuthorizationResolver {
 
-  void mustHavePermission(IAuthRequest request, CedarPermission permission, IUserService userService) throws
-      CedarAccessException;
+  CedarUser getUserAndEnsurePermission(IAuthRequest request, CedarPermission permission, IUserService userService)
+      throws CedarAccessException;
 
-  CedarUser getAccountInfo(IAuthRequest authRequest) throws CedarAccessException;
+  CedarUser getUser(IAuthRequest authRequest, IUserService userService) throws CedarAccessException;
 
 }

@@ -8,13 +8,13 @@ import org.metadatacenter.server.security.model.user.CedarUser;
 public class AuthorizationNoauthResolver implements IAuthorizationResolver {
 
   @Override
-  public void mustHavePermission(IAuthRequest authRequest, CedarPermission permission, IUserService userService) throws
-      CedarAccessException {
-    // Do nothing. If we do not throw exception, it means the user has the permission
+  public CedarUser getUserAndEnsurePermission(IAuthRequest authRequest, CedarPermission permission, IUserService
+      userService) throws CedarAccessException {
+    return null;
   }
 
   @Override
-  public CedarUser getAccountInfo(IAuthRequest authRequest) throws CedarAccessException {
+  public CedarUser getUser(IAuthRequest authRequest, IUserService userService) throws CedarAccessException {
     return null;
   }
 

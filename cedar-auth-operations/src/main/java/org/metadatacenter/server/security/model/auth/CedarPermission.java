@@ -31,7 +31,9 @@ public enum CedarPermission {
   FOLDER_UPDATE(CedarNodeType.Types.FOLDER, CedarObjectConstants.ACCESS_UPDATE),
   FOLDER_DELETE(CedarNodeType.Types.FOLDER, CedarObjectConstants.ACCESS_DELETE),
 
-  JUST_AUTHORIZED("just", "authorized"),
+  LOGGED_IN(CedarObjectConstants.LOGGED_IN, CedarObjectConstants.ACCESS_READ),
+  SEARCH_INDEX_REINDEX(CedarObjectConstants.SEARCH_INDEX, CedarObjectConstants.ACCESS_CREATE),
+  SYSTEM_FOLDER_CREATE(CedarObjectConstants.SYSTEM_FOLDER, CedarObjectConstants.ACCESS_CREATE),
   USER_PROFILE_OWN_READ(CedarObjectConstants.USER_PROFILE_OWN, CedarObjectConstants.ACCESS_READ);
 
   private final String resourceType;
