@@ -44,6 +44,7 @@ public abstract class CedarUserRolePermissionUtil {
     instantiatorPermissions.add(CedarPermission.USER_PROFILE_OWN_READ.getPermissionName());
 
     builtInSystemAdministratorPermissions = new ArrayList<>();
+    builtInSystemAdministratorPermissions.add(CedarPermission.LOGGED_IN.getPermissionName());
     builtInSystemAdministratorPermissions.add(CedarPermission.SEARCH_INDEX_REINDEX.getPermissionName());
     builtInSystemAdministratorPermissions.add(CedarPermission.SYSTEM_FOLDER_CREATE.getPermissionName());
 

@@ -6,6 +6,7 @@ import play.mvc.Http;
 
 public class CedarApiKeyAuthRequest implements IAuthRequest {
 
+  private String authHeader;
   private String apiKey;
 
   private CedarApiKeyAuthRequest() {
@@ -13,17 +14,27 @@ public class CedarApiKeyAuthRequest implements IAuthRequest {
 
   CedarApiKeyAuthRequest(Http.Request request) {
     if (request != null) {
-      String auth = request.getHeader(Http.HeaderNames.AUTHORIZATION);
-      if (auth != null) {
-        if (auth.startsWith(HttpConstants.HTTP_AUTH_HEADER_APIKEY_PREFIX)) {
-          apiKey = auth.substring(HttpConstants.HTTP_AUTH_HEADER_APIKEY_PREFIX.length());
+      authHeader = request.getHeader(Http.HeaderNames.AUTHORIZATION);
+      if (authHeader != null) {
+        if (authHeader.startsWith(HttpConstants.HTTP_AUTH_HEADER_APIKEY_PREFIX)) {
+          apiKey = authHeader.substring(HttpConstants.HTTP_AUTH_HEADER_APIKEY_PREFIX.length());
         }
       }
     }
   }
 
+  public CedarApiKeyAuthRequest(String apiKey) {
+    this.apiKey = apiKey;
+    this.authHeader = HttpConstants.HTTP_AUTH_HEADER_APIKEY_PREFIX + apiKey;
+  }
+
   @Override
   public String getAuthString() {
     return apiKey;
+  }
+
+  @Override
+  public String getAuthHeader() {
+    return authHeader;
   }
 }

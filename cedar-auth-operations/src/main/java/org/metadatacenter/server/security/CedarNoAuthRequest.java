@@ -11,4 +11,9 @@ public class CedarNoAuthRequest implements IAuthRequest {
   public String getAuthString() {
     return null;
   }
+
+  @Override
+  public String getAuthHeader() {
+    return null;
+  }
 }

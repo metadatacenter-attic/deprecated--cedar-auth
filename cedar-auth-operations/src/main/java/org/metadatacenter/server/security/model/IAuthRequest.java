@@ -4,4 +4,5 @@ public interface IAuthRequest {
 
   String getAuthString();
 
+  String getAuthHeader();
 }

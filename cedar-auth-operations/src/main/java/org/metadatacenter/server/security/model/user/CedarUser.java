@@ -98,4 +98,15 @@ public class CedarUser {
   public CedarUserUIResourceTypeFilters getResourceTypeFilters() {
     return (CedarUserUIResourceTypeFilters) uiPreferences.get(UI_RESOURCE_TYPE_FILTERS);
   }
+
+  public String getFirstActiveApiKey() {
+    if (apiKeys != null && !apiKeys.isEmpty()) {
+      for (CedarUserApiKey k : apiKeys) {
+        if (k.isEnabled()) {
+          return k.getKey();
+        }
+      }
+    }
+    return null;
+  }
 }
