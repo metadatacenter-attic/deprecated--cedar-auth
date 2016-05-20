@@ -2,7 +2,7 @@ package org.metadatacenter.server.security.model.user;
 
 public class CedarUserUIFolderView implements CedarUserUIPreferences {
 
-  private String currentPath;
+  private String currentFolderId;
   private String sortBy;
   private SortOrder sortDirection;
   private ViewMode viewMode;
@@ -10,12 +10,12 @@ public class CedarUserUIFolderView implements CedarUserUIPreferences {
   public CedarUserUIFolderView() {
   }
 
-  public String getCurrentPath() {
-    return currentPath;
+  public String getCurrentFolderId() {
+    return currentFolderId;
   }
 
-  public void setCurrentPath(String currentPath) {
-    this.currentPath = currentPath;
+  public void setCurrentFolderId(String currentFolderId) {
+    this.currentFolderId = currentFolderId;
   }
 
   public String getSortBy() {

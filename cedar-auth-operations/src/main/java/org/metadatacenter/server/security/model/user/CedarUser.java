@@ -1,5 +1,6 @@
 package org.metadatacenter.server.security.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class CedarUser {
 
   private String userId;
   private String screenName;
-  private String homePath;
+  private String homeFolderId;
   private List<CedarUserApiKey> apiKeys;
   private List<CedarUserRole> roles;
   private List<String> permissions;
@@ -47,12 +48,12 @@ public class CedarUser {
     this.screenName = screenName;
   }
 
-  public String getHomePath() {
-    return homePath;
+  public String getHomeFolderId() {
+    return homeFolderId;
   }
 
-  public void setHomePath(String homePath) {
-    this.homePath = homePath;
+  public void setHomeFolderId(String homeFolderId) {
+    this.homeFolderId = homeFolderId;
   }
 
   public List<CedarUserApiKey> getApiKeys() {
@@ -99,6 +100,7 @@ public class CedarUser {
     return (CedarUserUIResourceTypeFilters) uiPreferences.get(UI_RESOURCE_TYPE_FILTERS);
   }
 
+  @JsonIgnore
   public String getFirstActiveApiKey() {
     if (apiKeys != null && !apiKeys.isEmpty()) {
       for (CedarUserApiKey k : apiKeys) {
