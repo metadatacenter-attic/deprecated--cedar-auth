@@ -4,6 +4,7 @@ package org.metadatacenter.server.security.util;
 import org.metadatacenter.server.security.model.user.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class CedarUserUtil {
@@ -13,6 +14,10 @@ public class CedarUserUtil {
   }
 
   public static CedarUser createUserFromBlueprint(String id, String screenName) {
+    return createUserFromBlueprint(id, screenName, null);
+  }
+
+  public static CedarUser createUserFromBlueprint(String id, String screenName, List<CedarUserRole> roles) {
     CedarUser user = new CedarUser();
     user.setUserId(id);
     user.setScreenName(screenName);
@@ -26,8 +31,12 @@ public class CedarUserUtil {
 
     user.getApiKeys().add(apiKey);
 
-    user.getRoles().add(CedarUserRole.TEMPLATE_CREATOR);
-    user.getRoles().add(CedarUserRole.TEMPLATE_INSTANTIATOR);
+    if (roles == null || roles.isEmpty()) {
+      user.getRoles().add(CedarUserRole.TEMPLATE_CREATOR);
+      user.getRoles().add(CedarUserRole.TEMPLATE_INSTANTIATOR);
+    } else {
+      user.getRoles().addAll(roles);
+    }
 
     CedarUserUIFolderView folderView = user.getFolderView();
     folderView.setSortBy("title");
