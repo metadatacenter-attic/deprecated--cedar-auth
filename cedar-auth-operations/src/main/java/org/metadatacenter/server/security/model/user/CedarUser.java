@@ -88,14 +88,17 @@ public class CedarUser {
     this.uiPreferences = uiPreferences;
   }
 
+  @JsonIgnore
   public CedarUserUIPopulateATemplate getPopulateATemplate() {
     return (CedarUserUIPopulateATemplate) uiPreferences.get(UI_POPULATE_A_TEMPLATE);
   }
 
+  @JsonIgnore
   public CedarUserUIFolderView getFolderView() {
     return (CedarUserUIFolderView) uiPreferences.get(UI_FOLDER_VIEW);
   }
 
+  @JsonIgnore
   public CedarUserUIResourceTypeFilters getResourceTypeFilters() {
     return (CedarUserUIResourceTypeFilters) uiPreferences.get(UI_RESOURCE_TYPE_FILTERS);
   }
