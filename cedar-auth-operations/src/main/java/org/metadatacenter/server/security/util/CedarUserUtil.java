@@ -39,7 +39,7 @@ public class CedarUserUtil {
     }
 
     CedarUserUIFolderView folderView = user.getFolderView();
-    folderView.setSortBy("title");
+    folderView.setSortBy("name");
     folderView.setSortDirection(SortOrder.ASC);
     folderView.setViewMode(ViewMode.GRID);
 
