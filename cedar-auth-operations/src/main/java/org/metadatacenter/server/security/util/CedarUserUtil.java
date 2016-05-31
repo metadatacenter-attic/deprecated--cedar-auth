@@ -52,7 +52,7 @@ public class CedarUserUtil {
     CedarUserUIPopulateATemplate populateATemplate = user.getPopulateATemplate();
     populateATemplate.setViewMode(ViewMode.GRID);
     populateATemplate.setOpened(true);
-    populateATemplate.setSortBy("title");
+    populateATemplate.setSortBy("name");
     populateATemplate.setSortDirection(SortOrder.ASC);
     return user;
   }
