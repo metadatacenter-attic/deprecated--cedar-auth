@@ -1,16 +1,12 @@
 package org.metadatacenter.server.security.model.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.lang.String;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class CedarUserApiKey {
   private String key;
   private String serviceName;
   private String description;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "GMT")
-  private Date creationDate;
+  private LocalDateTime creationDate;
   private boolean enabled;
 
   public CedarUserApiKey() {
@@ -40,11 +36,11 @@ public class CedarUserApiKey {
     this.description = description;
   }
 
-  public Date getCreationDate() {
+  public LocalDateTime getCreationDate() {
     return creationDate;
   }
 
-  public void setCreationDate(Date creationDate) {
+  public void setCreationDate(LocalDateTime creationDate) {
     this.creationDate = creationDate;
   }
 
@@ -56,3 +52,4 @@ public class CedarUserApiKey {
     this.enabled = enabled;
   }
 }
+

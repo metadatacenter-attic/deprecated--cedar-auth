@@ -16,4 +16,13 @@ public enum ViewMode {
   public String getValue() {
     return value;
   }
+
+  public static ViewMode forValue(String v) {
+    for (ViewMode vm : ViewMode.values()) {
+      if (vm.getValue().equals(v)) {
+        return vm;
+      }
+    }
+    return null;
+  }
 }

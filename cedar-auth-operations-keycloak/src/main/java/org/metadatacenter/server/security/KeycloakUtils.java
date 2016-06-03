@@ -23,6 +23,7 @@ import org.metadatacenter.server.security.model.IUserInfo;
 import org.metadatacenter.server.security.model.KeycloakUserInfo;
 import org.metadatacenter.server.security.model.auth.AuthorisedUser;
 import org.metadatacenter.server.security.model.user.CedarUser;
+import org.metadatacenter.util.json.JsonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,8 +112,7 @@ public class KeycloakUtils {
       //System.out.println("Status code:" + statusCode);
       String responseAsString = EntityUtils.toString(response.getEntity());
       if (statusCode == HttpConstants.OK) {
-        ObjectMapper mapper = new ObjectMapper();
-        userInfo = mapper.readValue(responseAsString, KeycloakUserInfo.class);
+        userInfo = JsonMapper.MAPPER.readValue(responseAsString, KeycloakUserInfo.class);
       } else {
         //System.out.println("Reponse:" + responseAsString);
       }

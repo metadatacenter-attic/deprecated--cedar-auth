@@ -4,7 +4,7 @@ public class CedarUserUIFolderView implements CedarUserUIPreferences {
 
   private String currentFolderId;
   private String sortBy;
-  private SortOrder sortDirection;
+  private SortDirection sortDirection;
   private ViewMode viewMode;
 
   public CedarUserUIFolderView() {
@@ -26,11 +26,11 @@ public class CedarUserUIFolderView implements CedarUserUIPreferences {
     this.sortBy = sortBy;
   }
 
-  public SortOrder getSortDirection() {
+  public SortDirection getSortDirection() {
     return sortDirection;
   }
 
-  public void setSortDirection(SortOrder sortDirection) {
+  public void setSortDirection(SortDirection sortDirection) {
     this.sortDirection = sortDirection;
   }
 

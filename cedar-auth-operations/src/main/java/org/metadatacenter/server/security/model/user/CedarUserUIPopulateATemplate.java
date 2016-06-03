@@ -4,7 +4,7 @@ public class CedarUserUIPopulateATemplate implements CedarUserUIPreferences {
 
   private boolean opened;
   private String sortBy;
-  private SortOrder sortDirection;
+  private SortDirection sortDirection;
   private ViewMode viewMode;
 
   public CedarUserUIPopulateATemplate() {
@@ -26,11 +26,11 @@ public class CedarUserUIPopulateATemplate implements CedarUserUIPreferences {
     this.sortBy = sortBy;
   }
 
-  public SortOrder getSortDirection() {
+  public SortDirection getSortDirection() {
     return sortDirection;
   }
 
-  public void setSortDirection(SortOrder sortDirection) {
+  public void setSortDirection(SortDirection sortDirection) {
     this.sortDirection = sortDirection;
   }
 
