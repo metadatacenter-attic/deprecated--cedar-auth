@@ -14,6 +14,8 @@ public class CedarUser {
   public static final String UI_POPULATE_A_TEMPLATE = "populateATemplate";
   public static final String UI_FOLDER_VIEW = "folderView";
   public static final String UI_RESOURCE_TYPE_FILTERS = "resourceTypeFilters";
+  public static final String UI_FACETED_SEARCH = "facetedSearch";
+  public static final String UI_INFO_PANEL = "infoPanel";
 
   private String userId;
   private String screenName;
@@ -30,6 +32,8 @@ public class CedarUser {
     this.uiPreferences.put(UI_POPULATE_A_TEMPLATE, new CedarUserUIPopulateATemplate());
     this.uiPreferences.put(UI_FOLDER_VIEW, new CedarUserUIFolderView());
     this.uiPreferences.put(UI_RESOURCE_TYPE_FILTERS, new CedarUserUIResourceTypeFilters());
+    this.uiPreferences.put(UI_FACETED_SEARCH, new CedarUserUIFacetedSearch());
+    this.uiPreferences.put(UI_INFO_PANEL, new CedarUserUIInfoPanel());
   }
 
   public String getUserId() {
