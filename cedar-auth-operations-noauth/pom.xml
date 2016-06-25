@@ -23,7 +23,7 @@
 
     <dependency>
       <groupId>org.metadatacenter</groupId>
-      <artifactId>cedar-auth-operations</artifactId>
+      <artifactId>cedar-server-globals</artifactId>
     </dependency>
 
   </dependencies>

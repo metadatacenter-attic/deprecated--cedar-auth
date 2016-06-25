@@ -1,6 +1,5 @@
 package org.metadatacenter.server.security.util;
 
-
 import org.metadatacenter.config.BlueprintUIPreferences;
 import org.metadatacenter.config.BlueprintUserProfile;
 import org.metadatacenter.server.security.model.user.*;
