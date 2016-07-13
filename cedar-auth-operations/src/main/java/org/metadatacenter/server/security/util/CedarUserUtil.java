@@ -2,6 +2,7 @@ package org.metadatacenter.server.security.util;
 
 import org.metadatacenter.config.BlueprintUIPreferences;
 import org.metadatacenter.config.BlueprintUserProfile;
+import org.metadatacenter.server.security.CedarUserRolePermissionUtil;
 import org.metadatacenter.server.security.model.user.*;
 
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class CedarUserUtil {
     } else {
       user.getRoles().addAll(roles);
     }
+    CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
 
     // set folder view defaults
     CedarUserUIFolderView folderView = user.getFolderView();

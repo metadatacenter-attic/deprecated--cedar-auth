@@ -1,6 +1,5 @@
 package org.metadatacenter.server.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -191,9 +190,6 @@ public class KeycloakUtils {
       e.printStackTrace();
     } catch (ProcessingException e) {
       e.printStackTrace();
-    }
-    if (user != null) {
-      CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
     }
     return user;
   }
