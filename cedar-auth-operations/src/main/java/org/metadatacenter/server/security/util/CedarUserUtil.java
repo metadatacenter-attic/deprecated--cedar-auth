@@ -2,6 +2,7 @@ package org.metadatacenter.server.security.util;
 
 import org.metadatacenter.config.BlueprintUIPreferences;
 import org.metadatacenter.config.BlueprintUserProfile;
+import org.metadatacenter.config.CedarConfig;
 import org.metadatacenter.server.security.CedarUserRolePermissionUtil;
 import org.metadatacenter.server.security.model.user.*;
 
@@ -12,19 +13,40 @@ import java.util.UUID;
 public class CedarUserUtil {
 
   private CedarUserUtil() {
-
   }
 
-  public static CedarUser createUserFromBlueprint(String id, String screenName, BlueprintUserProfile blueprint,
-                                                  BlueprintUIPreferences uipref) {
-    return createUserFromBlueprint(id, screenName, null, blueprint, uipref);
+  public static CedarUser createUserFromBlueprint(ICedarUserRepresentation ur) {
+    return createUserFromBlueprint(ur, null);
   }
 
-  public static CedarUser createUserFromBlueprint(String id, String screenName, List<CedarUserRole> roles,
-                                                  BlueprintUserProfile blueprint, BlueprintUIPreferences uipref) {
+  public static String buildScreenName(ICedarUserRepresentation ur) {
+    CedarConfig cedarConfig = CedarConfig.getInstance();
+    String screenName = cedarConfig.getBlueprintUserProfile().getScreenNameTemplate();
+    screenName = screenName.replace("{firstName}", ur.getFirstName());
+    screenName = screenName.replace("{lastName}", ur.getLastName());
+    return screenName;
+  }
+
+  public static String buildHomeFolderDescription(ICedarUserRepresentation ur) {
+    CedarConfig cedarConfig = CedarConfig.getInstance();
+    String homeDescription = cedarConfig.getBlueprintUserProfile().getHomeFolderDescriptionTemplate();
+    homeDescription = homeDescription.replace("{firstName}", ur.getFirstName());
+    homeDescription = homeDescription.replace("{lastName}", ur.getLastName());
+    return homeDescription;
+  }
+
+  public static CedarUser createUserFromBlueprint(ICedarUserRepresentation ur, List<CedarUserRole> roles) {
+    CedarConfig cedarConfig = CedarConfig.getInstance();
+    BlueprintUserProfile blueprint = cedarConfig.getBlueprintUserProfile();
+    BlueprintUIPreferences uiPref = cedarConfig.getBlueprintUIPreferences();
+
+    String screenName = buildScreenName(ur);
+
     CedarUser user = new CedarUser();
-    user.setUserId(id);
+    user.setUserId(ur.getUserId());
     user.setScreenName(screenName);
+    user.setFirstName(ur.getFirstName());
+    user.setLastName(ur.getLastName());
 
     LocalDateTime now = LocalDateTime.now();
     // create a default API Key
@@ -47,9 +69,9 @@ public class CedarUserUtil {
 
     // set folder view defaults
     CedarUserUIFolderView folderView = user.getFolderView();
-    folderView.setSortBy(uipref.getFolderView().getSortBy());
-    folderView.setSortDirection(SortDirection.forValue(uipref.getFolderView().getSortDirection()));
-    folderView.setViewMode(ViewMode.forValue(uipref.getFolderView().getViewMode()));
+    folderView.setSortBy(uiPref.getFolderView().getSortBy());
+    folderView.setSortDirection(SortDirection.forValue(uiPref.getFolderView().getSortDirection()));
+    folderView.setViewMode(ViewMode.forValue(uiPref.getFolderView().getViewMode()));
 
     // set resource type filter defaults
     CedarUserUIResourceTypeFilters resourceTypeFilters = user.getResourceTypeFilters();
@@ -60,12 +82,11 @@ public class CedarUserUtil {
 
     // set populate-a-template view defaults
     CedarUserUIPopulateATemplate populateATemplate = user.getPopulateATemplate();
-    populateATemplate.setOpened(uipref.getPopulateATemplate().getOpened());
-    populateATemplate.setSortBy(uipref.getPopulateATemplate().getSortBy());
-    populateATemplate.setSortDirection(SortDirection.forValue(uipref.getPopulateATemplate().getSortDirection()));
-    populateATemplate.setViewMode(ViewMode.forValue(uipref.getPopulateATemplate().getViewMode()));
+    populateATemplate.setOpened(uiPref.getPopulateATemplate().getOpened());
+    populateATemplate.setSortBy(uiPref.getPopulateATemplate().getSortBy());
+    populateATemplate.setSortDirection(SortDirection.forValue(uiPref.getPopulateATemplate().getSortDirection()));
+    populateATemplate.setViewMode(ViewMode.forValue(uiPref.getPopulateATemplate().getViewMode()));
     return user;
   }
-
 
 }
