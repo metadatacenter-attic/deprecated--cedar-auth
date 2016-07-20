@@ -6,12 +6,11 @@
   <parent>
     <groupId>org.metadatacenter</groupId>
     <artifactId>cedar-auth</artifactId>
-    <version>0.1.0</version>
+    <version>0.5.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.metadatacenter</groupId>
   <artifactId>cedar-auth-operations</artifactId>
-  <version>0.1.0</version>
   <packaging>jar</packaging>
 
   <name>CEDAR Auth Operations - Generic</name>
@@ -20,6 +19,17 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.metadatacenter</groupId>
+      <artifactId>cedar-server-utils-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metadatacenter</groupId>
+      <artifactId>cedar-project-config</artifactId>
+    </dependency>
+
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -54,16 +64,6 @@
     <dependency>
       <groupId>com.github.fge</groupId>
       <artifactId>json-schema-validator</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.metadatacenter</groupId>
-      <artifactId>cedar-server-utils-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.metadatacenter</groupId>
-      <artifactId>cedar-project-config</artifactId>
     </dependency>
 
   </dependencies>
