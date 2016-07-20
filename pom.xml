@@ -10,11 +10,16 @@
 
   <groupId>org.metadatacenter</groupId>
   <artifactId>cedar-auth</artifactId>
-  <version>0.5.2</version>
+  <version>0.5.2-SNAPSHOT</version>
   <packaging>pom</packaging>
-
   <name>CEDAR Authorization Components</name>
   <description>CEDAR authorization components</description>
+
+  <scm>
+    <connection>scm:git:git@github.com:metadatacenter/cedar-auth.git</connection>
+    <developerConnection>scm:git:git@github.com:metadatacenter/cedar-auth.git</developerConnection>
+    <url>https://github.com/metadatacenter/cedar-auth</url>
+  </scm>
 
   <modules>
     <module>cedar-auth-operations</module>
