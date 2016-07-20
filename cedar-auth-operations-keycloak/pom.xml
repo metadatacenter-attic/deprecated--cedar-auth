@@ -16,6 +16,9 @@
   <name>CEDAR Auth Operations - Keycloak related code</name>
 
   <properties>
+
+    <cedar.version>0.5.2-SNAPSHOT<cedar.version>
+
   </properties>
 
   <dependencies>
@@ -23,6 +26,7 @@
     <dependency>
       <groupId>org.metadatacenter</groupId>
       <artifactId>cedar-server-utils-core</artifactId>
+      <version>${cedar.version}</version>
     </dependency>
 
 
