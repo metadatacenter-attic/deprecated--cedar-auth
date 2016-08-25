@@ -20,11 +20,24 @@ public class CedarUserUtil {
   }
 
   public static String buildScreenName(ICedarUserRepresentation ur) {
-    CedarConfig cedarConfig = CedarConfig.getInstance();
-    String screenName = cedarConfig.getBlueprintUserProfile().getScreenNameTemplate();
-    screenName = screenName.replace("{firstName}", ur.getFirstName());
-    screenName = screenName.replace("{lastName}", ur.getLastName());
-    return screenName;
+    if (ur != null) {
+      CedarConfig cedarConfig = CedarConfig.getInstance();
+      String screenName = cedarConfig.getBlueprintUserProfile().getScreenNameTemplate();
+      if (screenName != null) {
+        screenName = screenName.replace("{firstName}", ur.getFirstName() == null ? "" : ur.getFirstName());
+        screenName = screenName.replace("{lastName}", ur.getLastName() == null? "" : ur.getLastName());
+      }
+      return screenName;
+    } else {
+      return null;
+    }
+  }
+
+  public static void fillScreenName(ICedarUserRepresentation ur) {
+    if (ur != null) {
+      String screenName = CedarUserUtil.buildScreenName(ur);
+      ur.setDisplayName(screenName);
+    }
   }
 
   public static String buildHomeFolderDescription(ICedarUserRepresentation ur) {
