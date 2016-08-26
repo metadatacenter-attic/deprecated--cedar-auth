@@ -5,6 +5,7 @@ import org.metadatacenter.config.BlueprintUserProfile;
 import org.metadatacenter.config.CedarConfig;
 import org.metadatacenter.server.security.CedarUserRolePermissionUtil;
 import org.metadatacenter.server.security.model.user.*;
+import org.metadatacenter.util.CedarUserNameUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,47 +20,16 @@ public class CedarUserUtil {
     return createUserFromBlueprint(ur, null);
   }
 
-  public static String buildScreenName(ICedarUserRepresentation ur) {
-    if (ur != null) {
-      CedarConfig cedarConfig = CedarConfig.getInstance();
-      String screenName = cedarConfig.getBlueprintUserProfile().getScreenNameTemplate();
-      if (screenName != null) {
-        screenName = screenName.replace("{firstName}", ur.getFirstName() == null ? "" : ur.getFirstName());
-        screenName = screenName.replace("{lastName}", ur.getLastName() == null? "" : ur.getLastName());
-      }
-      return screenName;
-    } else {
-      return null;
-    }
-  }
-
-  public static void fillScreenName(ICedarUserRepresentation ur) {
-    if (ur != null) {
-      String screenName = CedarUserUtil.buildScreenName(ur);
-      ur.setDisplayName(screenName);
-    }
-  }
-
-  public static String buildHomeFolderDescription(ICedarUserRepresentation ur) {
-    CedarConfig cedarConfig = CedarConfig.getInstance();
-    String homeDescription = cedarConfig.getBlueprintUserProfile().getHomeFolderDescriptionTemplate();
-    homeDescription = homeDescription.replace("{firstName}", ur.getFirstName());
-    homeDescription = homeDescription.replace("{lastName}", ur.getLastName());
-    return homeDescription;
-  }
-
   public static CedarUser createUserFromBlueprint(ICedarUserRepresentation ur, List<CedarUserRole> roles) {
     CedarConfig cedarConfig = CedarConfig.getInstance();
     BlueprintUserProfile blueprint = cedarConfig.getBlueprintUserProfile();
     BlueprintUIPreferences uiPref = cedarConfig.getBlueprintUIPreferences();
 
-    String screenName = buildScreenName(ur);
-
     CedarUser user = new CedarUser();
-    user.setUserId(ur.getUserId());
-    user.setScreenName(screenName);
+    user.setId(ur.getId());
     user.setFirstName(ur.getFirstName());
     user.setLastName(ur.getLastName());
+    user.setEmail(ur.getEmail());
 
     LocalDateTime now = LocalDateTime.now();
     // create a default API Key

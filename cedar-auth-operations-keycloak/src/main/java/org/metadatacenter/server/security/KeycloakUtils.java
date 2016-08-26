@@ -172,8 +172,8 @@ public class KeycloakUtils {
     if (accessToken != null) {
       au.setId(accessToken.getSubject());
       au.setFirstName(accessToken.getGivenName());
-      au.setMiddleName(accessToken.getMiddleName());
       au.setLastName(accessToken.getFamilyName());
+      au.setEmail(accessToken.getEmail());
     }
     return au;
   }
