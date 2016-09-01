@@ -46,9 +46,6 @@ public class AuthorizationKeycloakAndApiKeyResolver implements IAuthorizationRes
       if (user == null) {
         throw new CedarUserNotFoundException(new ApiKeyNotFoundException(authRequest.getAuthString()));
       } else {
-        if (user != null) {
-          CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
-        }
         return user;
       }
     } else {

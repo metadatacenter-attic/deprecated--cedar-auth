@@ -1,6 +1,5 @@
 package org.metadatacenter.server.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -173,8 +172,8 @@ public class KeycloakUtils {
     if (accessToken != null) {
       au.setId(accessToken.getSubject());
       au.setFirstName(accessToken.getGivenName());
-      au.setMiddleName(accessToken.getMiddleName());
       au.setLastName(accessToken.getFamilyName());
+      au.setEmail(accessToken.getEmail());
     }
     return au;
   }
@@ -191,9 +190,6 @@ public class KeycloakUtils {
       e.printStackTrace();
     } catch (ProcessingException e) {
       e.printStackTrace();
-    }
-    if (user != null) {
-      CedarUserRolePermissionUtil.expandRolesIntoPermissions(user);
     }
     return user;
   }
